@@ -2,6 +2,8 @@
 
 Hyperledger Fabric based solution for consortium of logistics companies in any distribution or supply-chain industries
 
+https://github.com/dcentrum/Project-HLF-Logistics.git
+
 Here assumption is that you have installed all [prerequisites](https://hyperledger-fabric.readthedocs.io/en/release-1.3/prereqs.html) that a standard Hyperledger Fabric requires.
 
 We have three folders for three different layers
