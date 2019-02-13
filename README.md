@@ -34,7 +34,7 @@ cd BlockFabric
 
 ```
 
-## Start Web server
+<!-- ## Start Web server
 Run following commands in **BlockServer** folder to start the web server
 
 ```
@@ -73,7 +73,7 @@ To kill the complete network, use the **./teardown.sh** in **BlockFabric** folde
 cd BlockFabric
 
 ./teardown.sh
-```
+``` -->
 
 
 Thank you.
