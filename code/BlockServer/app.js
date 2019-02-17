@@ -407,7 +407,7 @@ app.delete('/api/booking/:bookingid', async (req, res) => {
 		console.error('Failed to invoke successfully :: ' + err);
 	});
 });
-app.get('/api/booking/history', async (req, res) => {
+app.get('/api/booking/:bookingid/history', async (req, res) => {
 
 	const request = {
 		//targets : --- letting this default to the peers assigned to the channel
