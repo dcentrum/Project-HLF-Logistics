@@ -1,7 +1,7 @@
 {
     "name": "block",
     "version": "1.0.0",
-    "description": "Hyperledger Fabric Car Sample Application",
+    "description": "Hyperledger Fabric logistics Sample Application",
     "main": "block.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,7 +18,7 @@
     "keywords": [
         "Hyperledger",
         "Fabric",
-        "Car",
+        "logistics",
         "Sample",
         "Application"
     ]

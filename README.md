@@ -26,7 +26,7 @@ This is end user interface developed using Angular 7.
 This consumes REST api to contact with **BlockServer** web server.
 
 ## Start Fabric
-Run following commands in **BlockServer** folder to start network, install dependencies, enroll admin and register user.
+Run following commands in **BlockServer** folder to start network, install dependencies, enroll Admin and register user.
 
 ```
 
