@@ -12,7 +12,7 @@ export MSYS_NO_PATHCONV=1
 
 docker-compose -f docker-compose.yml down
 
-docker-compose -f docker-compose.yml up -d 
+docker-compose -f docker-compose.yml up -d
 # ca.block.com orderer.block.com peer0.mfg1.block.com couchdb
 
 # wait for Hyperledger Fabric to start
@@ -43,5 +43,3 @@ docker exec -e "CORE_PEER_LOCALMSPID=Rtl1MSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/g
 #RTL1 joined channel
 
 #all peers joined the commonchannel
-
-
