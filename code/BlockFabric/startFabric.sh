@@ -9,7 +9,7 @@ set -e
 IMAGETAG="1.3.0"
 THIRDPARTYIMAGETAG="0.4.13"
 # don't rewrite paths for Windows Git Bash users
-export MSYS_NO_PATHCONV=1
+# export MSYS_NO_PATHCONV=1
 starttime=$(date +%s)
 LANGUAGE=${1:-"golang"}
 CC_SRC_PATH=github.com/block/go
@@ -69,11 +69,11 @@ printf "\n chain code install and instanciation in mfg2 end \n"
 
 printf "\n Admins enrollment start \n"
 
- node ./../BlockServer/enrollAdmin.js mfg1
- node ./../BlockServer/enrollAdmin.js mfg2
- node ./../BlockServer/enrollAdmin.js shp1
- node ./../BlockServer/enrollAdmin.js shp2
- node ./../BlockServer/enrollAdmin.js rtl1
+node ./../BlockServer/enrollAdmin.js mfg1
+node ./../BlockServer/enrollAdmin.js mfg2
+node ./../BlockServer/enrollAdmin.js shp1
+node ./../BlockServer/enrollAdmin.js shp2
+node ./../BlockServer/enrollAdmin.js rtl1
 
 printf "\n Admins enrollment end \n"
 
