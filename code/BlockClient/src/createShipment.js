@@ -1,30 +1,40 @@
 'use strict';
-/*
-* SPDX-License-Identifier: Apache-2.0
-*/
-/*
- * Chaincode Invoke
- 
-This code is based on code written by the Hyperledger Fabric community.
-  Original code can be found here: https://github.com/hyperledger/fabric-samples/blob/release/fabcar/invoke.js
-
- */
 
 var Fabric_Client = require('fabric-client');
 var path = require('path');
 var util = require('util');
 var os = require('os');
 
-console.log("GETTING LIFETIME HISTORY OF VEHICLE FROM BLOCKCHAIN... ");
+var fabric_client = new Fabric_Client();
 
-//var array = req.params.holder.split("-");
-var vehicleid = req.params.id
-//var owner = array[1];
+console.log("CREATING NEW SHIPMENT INTO BLOCKCHAIN..... ");
+
+var array = req.params.shipment.split("-");
+
+var bookingNo = array[0]
+var bookingDate = array[1]
+var shipper = array[2]
+var retailer = array[3]
+var manufacturer = array[4]
+var notes = array[5]
+
+var driverSigDate = array[6]
+var manufacturerSigDate = array[8]
+var manufacturerSig = array[9]
+var driverSig = array[10]
+var retailerSigDate = array[12]
+var notesAtManufacturer = array[13]
+var notesAtRetailer = array[14]
+var driverId = array[15]
+var vehicleId = array[16]
+var bookingStatus = array[17]
+var retailSig = array[18]
+
 
 var fabric_client = new Fabric_Client();
 
 // setup the fabric network
-var channel = fabric_client.newChannel('mychannel');
+var channel = fabric_client.newChannel('blockchannel');
 var peer = fabric_client.newPeer('grpc://localhost:7051');
 channel.addPeer(peer);
 var order = fabric_client.newOrderer('grpc://localhost:7050')
@@ -61,14 +71,14 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     tx_id = fabric_client.newTransactionID();
     console.log("Assigning transaction_id: ", tx_id._transaction_id);
 
-    // changeTunaHolder - requires 2 args , ex: args: ['1', 'Barry'],
     // send proposal to endorser
-    var request = {
+    const request = {
         //targets : --- letting this default to the peers assigned to the channel
-        chaincodeId: 'VLM',
-        fcn: 'getHistoryForVehicle',
-        args: [vehicleid],
-        chainId: 'mychannel',
+        chaincodeId: 'BLOCK',
+        fcn: 'createShipment',
+        args: [bookingNo, bookingDate, shipper, retailer, manufacturer, notes, driverSigDate, manufacturerSigDate, manufacturerSig, driverSig, RetailerSigDate,
+               retailerSigDate, notesAtManufacturer, notesAtRetailer, driverId, vehicleId, bookingStatus, retailSig],
+        chainId: 'blockchannel',
         txId: tx_id
     };
 
@@ -152,14 +162,14 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     // check the results in the order the promises were added to the promise all list
     if (results && results[0] && results[0].status === 'SUCCESS') {
         console.log('Successfully sent transaction to the orderer.');
-        res.json(tx_id.getTransactionID())
+        res.send(tx_id.getTransactionID());
     } else {
         console.error('Failed to order the transaction. Error code: ' + response.status);
     }
 
     if(results && results[1] && results[1].event_status === 'VALID') {
         console.log('Successfully committed the change to the ledger by the peer');
-        res.json(tx_id.getTransactionID())
+        res.send(tx_id.getTransactionID());
     } else {
         console.log('Transaction failed to be committed to the ledger due to ::'+results[1].event_status);
     }
