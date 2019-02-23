@@ -419,8 +419,179 @@ app.post('/api/shipment/:shipmentid/pickup', async (req, res) => {
 	tx_id = req.fabricClient.newTransactionID();
 	var request = {
 		chaincodeId: 'blockcc',
-		fcn: 'driverAcceptOrReject',
-		args: [req.query.shipmentid,req.body.partySign,req.body.pickupdate],
+		fcn: 'shipmentPickup',
+		args: [req.query.shipmentid,req.body.partySign,req.body.driverSign,req.body.pickupdate,req.body.lat,req.body.lng],
+		chainId: 'commonchannel',
+		txId: tx_id
+	};
+	req.channel.sendTransactionProposal(request).then((results) => {
+		var proposalResponses = results[0];
+		var proposal = results[1];
+		let isProposalGood = false;
+		if (proposalResponses && proposalResponses[0].response &&
+			proposalResponses[0].response.status === 200) {
+			isProposalGood = true;
+		} else {
+			console.error('Transaction proposal was bad');
+		}
+		if (isProposalGood) {
+			var request = {
+				proposalResponses: proposalResponses,
+				proposal: proposal
+			};
+
+			var transaction_id_string = tx_id.getTransactionID();
+			var promises = [];
+
+			var sendPromise = req.channel.sendTransaction(request);
+			promises.push(sendPromise);
+			let event_hub = req.channel.newChannelEventHub(req.peer);
+			let txPromise = new Promise((resolve, reject) => {
+				let handle = setTimeout(() => {
+					event_hub.unregisterTxEvent(transaction_id_string);
+					event_hub.disconnect();
+					resolve({ event_status: 'TIMEOUT' });
+				}, 30000);
+				event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
+					clearTimeout(handle);
+					var return_status = { event_status: code, tx_id: transaction_id_string };
+					if (code !== 'VALID') {
+						console.error('The transaction was invalid, code = ' + code);
+						resolve(return_status);
+					} else {
+						console.log('The transaction has been committed on peer ' + event_hub.getPeerAddr());
+						resolve(return_status);
+					}
+				}, (err) => {
+					reject(new Error('There was a problem with the eventhub ::' + err));
+				},
+					{ disconnect: true }
+				);
+				event_hub.connect();
+
+			});
+			promises.push(txPromise);
+
+			return Promise.all(promises);
+		} else {
+			console.error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
+			throw new Error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
+		}
+	}).then((results) => {
+		console.log('Send transaction promise and event listener promise have completed');
+		// check the results in the order the promises were added to the promise all list
+		if (results && results[0] && results[0].status === 'SUCCESS') {
+			console.log('Successfully sent transaction to the orderer.');
+		} else {
+			console.error('Failed to order the transaction. Error code: ' + results[0].status);
+		}
+
+		if (results && results[1] && results[1].event_status === 'VALID') {
+			console.log('Successfully committed the change to the ledger by the peer');
+		} else {
+			console.log('Transaction failed to be committed to the ledger due to ::' + results[1].event_status);
+		}
+		//req.channel.queryInfo(peer).then((Blockchain) => {
+		req.channel.queryBlockByTxID(results[1].tx_id).then((Block) => {
+			res.status(200).json({ 'result1': results[0], 'result2': results[1], 'Block': Block });
+		})
+
+	}).catch((err) => {
+		console.error('Failed to invoke successfully :: ' + err);
+	});
+});
+
+app.post('/api/shipment/:shipmentid/deliver', async (req, res) => {
+	tx_id = req.fabricClient.newTransactionID();
+	var request = {
+		chaincodeId: 'blockcc',
+		fcn: 'shipmentDeliver',
+		args: [req.query.shipmentid,req.body.partySign,req.body.driverSign,req.body.deliverdate,req.body.lat,req.body.lng],
+		chainId: 'commonchannel',
+		txId: tx_id
+	};
+	req.channel.sendTransactionProposal(request).then((results) => {
+		var proposalResponses = results[0];
+		var proposal = results[1];
+		let isProposalGood = false;
+		if (proposalResponses && proposalResponses[0].response &&
+			proposalResponses[0].response.status === 200) {
+			isProposalGood = true;
+		} else {
+			console.error('Transaction proposal was bad');
+		}
+		if (isProposalGood) {
+			var request = {
+				proposalResponses: proposalResponses,
+				proposal: proposal
+			};
+
+			var transaction_id_string = tx_id.getTransactionID();
+			var promises = [];
+
+			var sendPromise = req.channel.sendTransaction(request);
+			promises.push(sendPromise);
+			let event_hub = req.channel.newChannelEventHub(req.peer);
+			let txPromise = new Promise((resolve, reject) => {
+				let handle = setTimeout(() => {
+					event_hub.unregisterTxEvent(transaction_id_string);
+					event_hub.disconnect();
+					resolve({ event_status: 'TIMEOUT' });
+				}, 30000);
+				event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
+					clearTimeout(handle);
+					var return_status = { event_status: code, tx_id: transaction_id_string };
+					if (code !== 'VALID') {
+						console.error('The transaction was invalid, code = ' + code);
+						resolve(return_status);
+					} else {
+						console.log('The transaction has been committed on peer ' + event_hub.getPeerAddr());
+						resolve(return_status);
+					}
+				}, (err) => {
+					reject(new Error('There was a problem with the eventhub ::' + err));
+				},
+					{ disconnect: true }
+				);
+				event_hub.connect();
+
+			});
+			promises.push(txPromise);
+
+			return Promise.all(promises);
+		} else {
+			console.error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
+			throw new Error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
+		}
+	}).then((results) => {
+		console.log('Send transaction promise and event listener promise have completed');
+		// check the results in the order the promises were added to the promise all list
+		if (results && results[0] && results[0].status === 'SUCCESS') {
+			console.log('Successfully sent transaction to the orderer.');
+		} else {
+			console.error('Failed to order the transaction. Error code: ' + results[0].status);
+		}
+
+		if (results && results[1] && results[1].event_status === 'VALID') {
+			console.log('Successfully committed the change to the ledger by the peer');
+		} else {
+			console.log('Transaction failed to be committed to the ledger due to ::' + results[1].event_status);
+		}
+		//req.channel.queryInfo(peer).then((Blockchain) => {
+		req.channel.queryBlockByTxID(results[1].tx_id).then((Block) => {
+			res.status(200).json({ 'result1': results[0], 'result2': results[1], 'Block': Block });
+		})
+
+	}).catch((err) => {
+		console.error('Failed to invoke successfully :: ' + err);
+	});
+});
+app.post('/api/shipment/:shipmentid/package/:packageId/outbound', async (req, res) => {
+	tx_id = req.fabricClient.newTransactionID();
+	var request = {
+		chaincodeId: 'blockcc',
+		fcn: 'updatePackageOutbound',
+		args: [req.query.shipmentid,req.query.packageid,req.body.status],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
