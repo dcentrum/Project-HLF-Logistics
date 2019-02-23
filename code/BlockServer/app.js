@@ -59,7 +59,7 @@ app.post('/api/shipment', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'createShipment',
-		args: [req.body.bookingnumber, req.body.ceatedate,req.body.shipper, req.body.retailer,req.body.manufacturer],
+		args: [req.body.bookingnumber, req.body.ceatedate,req.body.shipper, req.body.retailer,req.body.manufacturer, req.body.pickupdate,req.body.pickuplocation,req.body.deliverdate,req.body.deliverlocation, req.body.notes],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
