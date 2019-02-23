@@ -1,30 +1,34 @@
 'use strict';
-/*
-* SPDX-License-Identifier: Apache-2.0
-*/
-/*
- * Chaincode Invoke
- 
-This code is based on code written by the Hyperledger Fabric community.
-  Original code can be found here: https://github.com/hyperledger/fabric-samples/blob/release/fabcar/invoke.js
-
- */
 
 var Fabric_Client = require('fabric-client');
 var path = require('path');
 var util = require('util');
 var os = require('os');
 
-console.log("GETTING LIFETIME HISTORY OF VEHICLE FROM BLOCKCHAIN... ");
+var fabric_client = new Fabric_Client();
 
-//var array = req.params.holder.split("-");
-var vehicleid = req.params.id
-//var owner = array[1];
+console.log("CREATING NEW SHIPMENT INTO BLOCKCHAIN..... ");
+
+var array = req.params.shipment.split("-");
+
+var bookingNo = array[0]
+var RWBNo = array[1]
+var hsnNo = array[2]
+var productName = array[3]
+var productType = array[4]
+var qty = array[5]
+
+var ProductSize = array[6]
+var PickupDate = array[8]
+var PickupLocation = array[9]
+var deliveryDate = array[10]
+var deliveryLocation = array[12]
+var shipmentStatus = array[13]
 
 var fabric_client = new Fabric_Client();
 
 // setup the fabric network
-var channel = fabric_client.newChannel('mychannel');
+var channel = fabric_client.newChannel('blockchannel');
 var peer = fabric_client.newPeer('grpc://localhost:7051');
 channel.addPeer(peer);
 var order = fabric_client.newOrderer('grpc://localhost:7050')
@@ -41,8 +45,6 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     // assign the store to the fabric client
     fabric_client.setStateStore(state_store);
     var crypto_suite = Fabric_Client.newCryptoSuite();
-    // use the same location for the state store (where the users' certificate are kept)
-    // and the crypto store (where the users' keys are kept)
     var crypto_store = Fabric_Client.newCryptoKeyStore({path: store_path});
     crypto_suite.setCryptoKeyStore(crypto_store);
     fabric_client.setCryptoSuite(crypto_suite);
@@ -56,19 +58,17 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     } else {
         throw new Error('Failed to get user1.... run registerUser.js');
     }
-
     // get a transaction id object based on the current user assigned to fabric client
     tx_id = fabric_client.newTransactionID();
     console.log("Assigning transaction_id: ", tx_id._transaction_id);
 
-    // changeTunaHolder - requires 2 args , ex: args: ['1', 'Barry'],
     // send proposal to endorser
-    var request = {
+    const request = {
         //targets : --- letting this default to the peers assigned to the channel
-        chaincodeId: 'VLM',
-        fcn: 'getVehicleDetails',
-        args: [vehicleid],
-        chainId: 'mychannel',
+        chaincodeId: 'BLOCK',
+        fcn: 'createPackage',
+        args: [bookingNo, RWBNo, hsnNo, productName, productType, qty, ProductSize, PickupDate, PickupLocation, deliveryDate, deliveryLocation, shipmentStatus],
+        chainId: 'blockchannel',
         txId: tx_id
     };
 
@@ -152,14 +152,14 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     // check the results in the order the promises were added to the promise all list
     if (results && results[0] && results[0].status === 'SUCCESS') {
         console.log('Successfully sent transaction to the orderer.');
-        res.json(tx_id.getTransactionID())
+        res.send(tx_id.getTransactionID());
     } else {
         console.error('Failed to order the transaction. Error code: ' + response.status);
     }
 
     if(results && results[1] && results[1].event_status === 'VALID') {
         console.log('Successfully committed the change to the ledger by the peer');
-        res.json(tx_id.getTransactionID())
+        res.send(tx_id.getTransactionID());
     } else {
         console.log('Transaction failed to be committed to the ledger due to ::'+results[1].event_status);
     }

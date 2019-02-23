@@ -1,30 +1,20 @@
 'use strict';
-/*
-* SPDX-License-Identifier: Apache-2.0
-*/
-/*
- * Chaincode Invoke
- 
-This code is based on code written by the Hyperledger Fabric community.
-  Original code can be found here: https://github.com/hyperledger/fabric-samples/blob/release/fabcar/invoke.js
-
- */
 
 var Fabric_Client = require('fabric-client');
 var path = require('path');
 var util = require('util');
 var os = require('os');
 
-console.log("CHANING THE OWNERSHIP OF VEHICLE... ");
+console.log("GETTING LIFETIME HISTORY OF SHIPMENT FROM BLOCKCHAIN... ");
 
-var array = req.params.holder.split("-");
-var vehicleid = array[0]
-var owner = array[1];
+//var array = req.params.holder.split("-");
+var bookingNo = req.params.id
+//var owner = array[1];
 
 var fabric_client = new Fabric_Client();
 
 // setup the fabric network
-var channel = fabric_client.newChannel('mychannel');
+var channel = fabric_client.newChannel('blockchannel');
 var peer = fabric_client.newPeer('grpc://localhost:7051');
 channel.addPeer(peer);
 var order = fabric_client.newOrderer('grpc://localhost:7050')
@@ -65,10 +55,10 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
     // send proposal to endorser
     var request = {
         //targets : --- letting this default to the peers assigned to the channel
-        chaincodeId: 'VLM',
-        fcn: 'changeOwnerShip',
-        args: [vehicleid, owner],
-        chainId: 'mychannel',
+        chaincodeId: 'BLOCK',
+        fcn: 'queryShipment',
+        args: [bookingNo],
+        chainId: 'blockchannel',
         txId: tx_id
     };
 
