@@ -120,21 +120,6 @@ func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
 	return shim.Success(nil)
 }
 
-/*
- * The Invoke method is called as a result of an application request to run the Smart Contract "fabcar"
- * The calling application program has also specified the particular smart contract function to be called, with arguments
- */
-
-func (s *SmartContract) fcn(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
-
-	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 1")
-	}
-
-	carAsBytes, _ := APIstub.GetState(args[0])
-	return shim.Success(carAsBytes)
-}
-
 func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
 	if len(args) <= 5 {
@@ -366,9 +351,7 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 	// Retrieve the requested Smart Contract function and arguments
 	function, args := APIstub.GetFunctionAndParameters()
 	// Route to the appropriate handler function to interact with the ledger appropriately
-	if function == "fcn" {
-		return s.fcn(APIstub, args)
-	} else if function == "initLedger" {
+	if function == "initLedger" {
 		return s.initLedger(APIstub)
 	} else if function == "getAllShipments" {
 		return s.getAllShipments(APIstub)

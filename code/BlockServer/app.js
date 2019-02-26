@@ -11,7 +11,6 @@ var refDataHelper = require('./refDataHelper');
 var authUtils = require('./authUtils');
 var FabricSdkService = require('./FabricSdkService');
 
-
 app.options('*', cors());
 app.use(cors());
 app.use(bodyParser.json());
@@ -23,7 +22,6 @@ app.use((req, res, next) => {
 	next();
 });
 app.use(authUtils.userValidation);
-
 app.get('/api/manufacturers', async (req, res) => {	
 		res.status(200).json(refDataHelper.getManufacturers());	
 });
@@ -53,7 +51,6 @@ app.get('/api/shipments', async (req, res) => {
 		res.status(500).json({ error: err.toString() })
 	})
 });
-
 app.post('/api/shipment', async (req, res) => {
 	tx_id = req.fabricClient.newTransactionID();
 	var request = {
@@ -158,7 +155,6 @@ app.get('/api/shipment', async (req, res) => {
 		res.status(500).json({ error: err.toString() })
 	})
 });
-
 app.post('/api/shipment/:shipmentid/package', async (req, res) => {
 	tx_id = req.fabricClient.newTransactionID();
 	var request = {
@@ -329,7 +325,6 @@ app.post('/api/shipment/:shipmentid/acceptorreject', async (req, res) => {
 		console.error('Failed to invoke successfully :: ' + err);
 	});
 }); 
-
 app.post('/api/shipment/:shipmentid/package/:packageId/driveracceptorreject', async (req, res) => {
 	tx_id = req.fabricClient.newTransactionID();
 	var request = {
@@ -500,7 +495,6 @@ app.post('/api/shipment/:shipmentid/pickup', async (req, res) => {
 		console.error('Failed to invoke successfully :: ' + err);
 	});
 });
-
 app.post('/api/shipment/:shipmentid/deliver', async (req, res) => {
 	tx_id = req.fabricClient.newTransactionID();
 	var request = {
@@ -586,7 +580,6 @@ app.post('/api/shipment/:shipmentid/deliver', async (req, res) => {
 		console.error('Failed to invoke successfully :: ' + err);
 	});
 });
-
 app.post('/api/shipment/:shipmentid/package/:packageId/outbound', async (req, res) => {
 	tx_id = req.fabricClient.newTransactionID();
 	var request = {
@@ -799,6 +792,5 @@ app.get('/api/trans', async (req, res) => {
 		res.status(500).json({ error: err.toString() })
 	});
 });
-
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);

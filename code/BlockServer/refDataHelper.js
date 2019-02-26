@@ -1,9 +1,9 @@
-var RefData = require("RefData.json");
+var RefData = require("./RefData.json");
 module.exports = {
-    getOrgByUser() {
+    getOrgByUser(username) {
         var org = '';
         RefData.users.forEach(user => {
-            if (user.username == req.headers.username) {
+            if (user.username == username) {
                 org = user.org;
             }
         });
