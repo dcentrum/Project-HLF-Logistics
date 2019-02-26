@@ -59,7 +59,7 @@ app.post('/api/shipment', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'createShipment',
-		args: [req.body.bookingnumber, req.body.ceatedate,req.body.shipper, req.body.retailer,req.body.manufacturer, req.body.pickupdate,req.body.pickuplocation,req.body.deliverdate,req.body.deliverlocation, req.body.notes],
+		args: [req.body.bookingnumber, req.body.createdate,req.body.shipper, req.body.retailer,req.body.manufacturer, req.body.pickupdate,req.body.pickuplocation,req.body.deliverdate,req.body.deliverlocation, req.body.notes],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -164,7 +164,7 @@ app.post('/api/shipment/:shipmentid/package', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'createPackage',
-		args: [req.query.shipmentid,req.body.rwbnumber, req.body.hsnnumber, req.body.productname, req.body.producttype, req.body.productqty,productsize],
+		args: [req.query.shipmentid,req.body.rwbnumber, req.body.hsnnumber, req.body.productname, req.body.producttype, req.body.productqty,, req.body.productsize],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -420,7 +420,7 @@ app.post('/api/shipment/:shipmentid/pickup', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'shipmentPickup',
-		args: [req.query.shipmentid,req.body.partySign,req.body.driverSign,req.body.pickupdate,req.body.lat,req.body.lng],
+		args: [req.query.shipmentid,req.body.partySign,req.body.partySigDate,req.body.driverSign,req.body.driverSigDate,req.body.lat,req.body.lng,req.body.notes],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -506,7 +506,7 @@ app.post('/api/shipment/:shipmentid/deliver', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'shipmentDeliver',
-		args: [req.query.shipmentid,req.body.partySign,req.body.driverSign,req.body.deliverdate,req.body.lat,req.body.lng],
+		args: [req.query.shipmentid,req.body.partySign,req.body.partySigDate,req.body.driverSign,req.body.driverSigDate,req.body.lat,req.body.lng,req.body.notes],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -586,6 +586,7 @@ app.post('/api/shipment/:shipmentid/deliver', async (req, res) => {
 		console.error('Failed to invoke successfully :: ' + err);
 	});
 });
+
 app.post('/api/shipment/:shipmentid/package/:packageId/outbound', async (req, res) => {
 	tx_id = req.fabricClient.newTransactionID();
 	var request = {
