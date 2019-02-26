@@ -1,0 +1,158 @@
+<div class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="span2">
+                <div class="sidebar">
+                    <ul class="widget widget-menu unstyled hidden-xs">
+                        <li>
+                            <a href="#" routerLink="/dashboard">
+                                <i class="menu-icon icon-bullhorn"></i>
+                                DashBoard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" routerLink="/track">
+                                <i class="menu-icon icon-bullhorn"></i>
+                                Track Shipment
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="menu-icon icon-signout"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                    <!--/.widget-nav-->
+                </div>
+            </div>
+            <!--/.span2-->
+            <div class="span9">
+                <div class="content">
+                    <div class="row-fluid span12" style="background-color:#fff;padding:10px;">
+                        <div class="module">
+                            <div class="module-head">
+                                <h3>Delivery Run Sheet (DRS)</h3>
+                            </div>
+                            <div class="module-body">
+                                <div class="row-fluid">
+                                    <div class="span12" style="margin-bottom:10px;">
+                                        <form class="navbar-search pull-left input-append" action="#">
+                                                <input type="text" name="search-box-product" placeholder="Booking Number" required class="span12" [(ngModel)] = "BookingNumber">
+                                                 <button class="btn" type="button">
+                                                <i class="icon-search"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label span6" for="basicinput"><b>Booking
+                                                    Number</b></label>
+                                            <label class="control-label span6" for="basicinput">ECO10001</label>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label span6"
+                                                for="basicinput"><b>Manufacturer</b></label>
+                                            <label class="control-label span6" for="basicinput">Ecobliss</label>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label span6" for="basicinput"><b>Retailer</b></label>
+                                            <label class="control-label span6" for="basicinput">DMart</label>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label span6" for="basicinput"><b>Pickup
+                                                    Date</b></label>
+                                            <label class="control-label span6" for="basicinput">27 Feb 2019</label>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label span6" for="basicinput"><b>Pickup
+                                                    Location</b></label>
+                                            <label class="control-label span6" for="basicinput">Madhapur,
+                                                Hyderabad</label>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label span6" for="basicinput"><b>Delivery
+                                                    Date</b></label>
+                                            <label class="control-label span6" for="basicinput">01 Mar 2019</label>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label span6" for="basicinput"><b>Delivery
+                                                    Location</b></label>
+                                            <label class="control-label span6" for="basicinput">MainRoad,
+                                                Vizianagaram</label>
+                                        </div>
+                                    </div>
+                                    <div class="span5" style="text-align: right;">
+                                        <img class="responsive" src="assets/images/dhl.png"
+                                            style="width: 100px; height: 100px;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <div class="module">
+                            <div class="module-head">
+                                <h3>Driver/Vehicle</h3>
+                            </div>
+                            <div class="module-body">
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label span4" for="basicinput">Driver <span
+                                                    class="asterisk">*</span></label>
+                                            <div class="controls span8">
+                                                <select tabindex="1" required class="span8">
+                                                    <option value="">Select</option>
+                                                    <option value="100001">Tom</option>
+                                                    <option value="100002">Jason</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label span4" for="basicinput">Vehicle Name <span
+                                                    class="asterisk">*</span></label>
+                                            <div class="controls span8">
+                                                <select tabindex="1" required class="span8">
+                                                    <option value="">Select</option>
+                                                    <option value="lmv">LMV</option>
+                                                    <option value="mgv">MGV</option>
+                                                    <option value="hmv">HMV</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label span4" for="basicinput">Vehicle Number <span
+                                                    class="asterisk">*</span></label>
+                                            <div class="controls span8">
+                                                <input data-title="A tooltip for the input" type="text" required
+                                                    placeholder="" data-original-title="" class="span9 tip">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="span12" style="text-align:center;">
+                            <a class="btn btn-info">Assign Driver</a>&nbsp;
+                            <a class="btn btn-inverse">Cancel</a>
+                        </div>
+                    </div>
+
+                </div>
+                <!--/.content-->
+            </div>
+            <!--/.span9-->
+        </div>
+    </div>
+    <!--/.container-->
+</div>
+<!--/.wrapper-->
