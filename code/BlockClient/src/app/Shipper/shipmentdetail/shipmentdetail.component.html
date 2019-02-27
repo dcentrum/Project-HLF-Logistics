@@ -118,8 +118,9 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="span12" style="text-align:center;">
-                            <a class="btn btn-success">Accept</a>
-                            <a class="btn btn-danger">Reject</a>
+                               
+                            <a class="btn btn-success"  (click)="getForm(Shipment.bookingNumber);" type="accept"  data-toggle="modal" data-target="#updateShipment" >Accept</a>
+                            <a class="btn btn-danger" class="btn btn-success"  (click)="getForm(Shipment.bookingNumber);" type="reject"  data-toggle="modal" data-target="#deleteShipment">Reject</a>
                         </div>
                     </div>
                 </div>

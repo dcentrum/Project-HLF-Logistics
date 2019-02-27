@@ -161,7 +161,7 @@
                                     <input type="hidden" name="manufacturer" value="" />
                                     <div class="span12" style="text-align:center;">
                                        <!-- <button type="submit" class="btn btn-info">Submit</button>-->
-                                        <button (click)="addAsset(myForm);" type="submit" class="btn btn-success" value="Refresh Page" onClick="setTimeout(window.location.reload.bind(window.location), 2000);" data-dismiss="modal">Submit</button>
+                                        <button (click)="addShipment(myForm);" type="submit" class="btn btn-success" value="submit">Submit</button>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -173,7 +173,7 @@
                                             <h3>Packages</h3>
                                         </div>
                                         <div class="span2">
-                                            <button type="button" class="btn btn-success"><i class="icon-plus"
+                                                <button (click)="resetForm()" type="button" class="btn btn-success"data-toggle="modal" data-target="#addPackageModal"><i class="icon-plus"
                                                     aria-hidden="true"></i> Add New Package</button>
                                         </div>
                                     </div>
