@@ -10,6 +10,7 @@ import { Key } from 'protractor';
   styleUrls: ['./shipments.component.css']
 })
 export class ShipmentsComponent implements OnInit {
+  
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: ShipmentlistDataSource;

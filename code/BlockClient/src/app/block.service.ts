@@ -103,7 +103,7 @@ export class BlockService {
     return this.http.get<any>(this.appUrl + 'driver?driverid=' + code)
       .pipe();
   }
-  createDriver(driver: any) {
+  addDriver(driver: any) {
     return this.http.post<any>(this.appUrl + 'driver', driver)
       .pipe();
   }
@@ -122,11 +122,11 @@ export class BlockService {
   
   /*Shipment Information*/
 
-  getShipment(bookingNumber: string) {
+  getShipment(bookingNumber: any) {
     return this.http.get<any>(this.appUrl + 'shipment?shipmentid=' + bookingNumber)
       .pipe();
   }
-  createShipment(bookingNumber: any) {
+  addShipment(bookingNumber: any) {
     return this.http.post<any>(this.appUrl + 'order', bookingNumber)
       .pipe();
   }
@@ -134,11 +134,11 @@ export class BlockService {
     return this.http.post<any>(this.appUrl + 'shipment', shipment)
       .pipe();
   }
-  deleteShipment(bookingNumber: string) {
+  deleteShipment(bookingNumber: any) {
     return this.http.delete(this.appUrl + 'shipment?shipmentid=' + bookingNumber)
       .pipe();
   }
-  ShipmentInfo(bookingNumber: string) {
+  ShipmentInfo(bookingNumber: any) {
     return this.http.get(this.appUrl + 'shipments/history?shipmentid=' + bookingNumber)
       .pipe();
   }
@@ -146,6 +146,37 @@ export class BlockService {
     return this.http.get<any>(this.appUrl + 'shipments')
       .pipe();
   }
+
+  
+  /*Pakcage Information*/
+
+  getPackage(RWBNumber: string) {
+    return this.http.get<any>(this.appUrl + 'RWBNumber?RWBNumber=' + RWBNumber)
+      .pipe();
+  }
+  addPackage(RWBNumber: any) {
+    return this.http.post<any>(this.appUrl + 'package', RWBNumber)
+      .pipe();
+  }
+  updatePackage(RWBNumber: any) {
+    return this.http.post<any>(this.appUrl + 'package', RWBNumber)
+      .pipe();
+  }
+  deletePackage(RWBNumber: string) {
+    return this.http.delete(this.appUrl + 'package?packageid=' + RWBNumber)
+      .pipe();
+  }
+  PackageInfo(RWBNumber: string) {
+    return this.http.get(this.appUrl + 'packgess/history?packgesid=' + RWBNumber)
+      .pipe();
+  }
+  getAllPackages() {
+    return this.http.get<any>(this.appUrl + 'packges')
+      .pipe();
+  }
+
+
+
 
    /* Retailer Information*/
   getAllRetailers(){
@@ -171,6 +202,17 @@ export class BlockService {
   addRetailer(retailer: { 'email': any; 'firstName': any; 'lastName': any; 'type': any; }): any {
     throw new Error("Method not implemented.");
   }
+
+  /*Delivery and Pickup Info*/
+  putDelivery(bookingNumber: any){
+    return this.http.get<any>(this.appUrl + 'bookingNumber', bookingNumber)
+    .pipe();
+  }
+  getPickup(bookingNumber: any) {
+    return this.http.get<any>(this.appUrl + 'bookingNumber', bookingNumber)
+    .pipe();
+  }
+  
   getBlockchainInfo() {
     return this.http.get(this.appUrl + 'blockchain')
       .pipe();
