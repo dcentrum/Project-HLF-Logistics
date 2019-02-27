@@ -143,6 +143,19 @@ app.post('/api/shipment', async (req, res) => {
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
+
+	// {
+	// 	"bookingnumber":"1124",
+	// 	"createdate":"2019-02-27",
+	// 	"shipper":"shp1",
+	// 	"retailer":"rtl1",
+	// 	"manufacturer":"mfg1",
+	// 	"pickupdate":2019-02-27",
+	// 	"pickuplocation":"Hyd",
+	// 	"deliverdate":"2019-02-27",
+	// 	'deliverlocation':"delhi",
+	// 	"notes":"some notes"
+	// 	}
 	req.channel.sendTransactionProposal(request).then((results) => {
 		var proposalResponses = results[0];
 		var proposal = results[1];
@@ -267,6 +280,14 @@ app.post('/api/shipment/:shipmentid/package', async (req, res) => {
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
+	// {
+	// 	"rwbnumber":"1234",
+	// 	"hsnnumber":"12345",
+	// 	"productname":"product1",
+	// 	"producttype":"type1",
+	// 	"productqty":"12",
+	// 	"productsize":"1
+	// 	}
 	req.channel.sendTransactionProposal(request).then((results) => {
 		
 		var proposalResponses = results[0];
