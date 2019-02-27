@@ -238,16 +238,37 @@ app.get('/api/shipment/:key', async (req, res) => {
 		res.status(500).json({ error: err.toString() })
 	})
 });
+// app.get('/api/shipment/:shipmentid/packages', async (req, res) => {
+// 	const request = {
+// 		chaincodeId: 'blockcc',
+// 		fcn: 'queryShipment',
+// 		args: [req.params.shipmentid]
+// 	};
+// 	req.channel.queryByChaincode(request).then((query_responses) => {
+// 		if (query_responses && query_responses.length == 1) {
+// 			if (query_responses[0] instanceof Error) {
+// 				console.error("error from query = ", query_responses[0]);
+// 			}
+// 		} else {
+// 			console.log("No payloads were returned from query");
+// 		}
+// 		res.status(200).json(query_responses[0].toString());
+// 	}).catch(function (err) {
+// 		res.status(500).json({ error: err.toString() })
+// 	})
+// });
 app.post('/api/shipment/:shipmentid/package', async (req, res) => {
+	console.log(req.body.rwbnumber)
 	tx_id = req.fabricClient.newTransactionID();
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'createPackage',
-		args: [req.params.shipmentid,req.body.rwbnumber, req.body.hsnnumber, req.body.productname, req.body.producttype, req.body.productqty,, req.body.productsize],
+		args: [req.params.shipmentid,req.body.rwbnumber, req.body.hsnnumber, req.body.productname, req.body.producttype, req.body.productqty,req.body.productsize],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
 	req.channel.sendTransactionProposal(request).then((results) => {
+		
 		var proposalResponses = results[0];
 		var proposal = results[1];
 		let isProposalGood = false;
@@ -262,10 +283,10 @@ app.post('/api/shipment/:shipmentid/package', async (req, res) => {
 				proposalResponses: proposalResponses,
 				proposal: proposal
 			};
-
+			console.log(results)
 			var transaction_id_string = tx_id.getTransactionID();
 			var promises = [];
-
+			
 			var sendPromise = req.channel.sendTransaction(request);
 			promises.push(sendPromise);
 			let event_hub = req.channel.newChannelEventHub(req.peer);
@@ -301,6 +322,7 @@ app.post('/api/shipment/:shipmentid/package', async (req, res) => {
 			throw new Error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
 		}
 	}).then((results) => {
+
 		console.log('Send transaction promise and event listener promise have completed');
 		// check the results in the order the promises were added to the promise all list
 		if (results && results[0] && results[0].status === 'SUCCESS') {
@@ -315,9 +337,8 @@ app.post('/api/shipment/:shipmentid/package', async (req, res) => {
 			console.log('Transaction failed to be committed to the ledger due to ::' + results[1].event_status);
 		}
 		//req.channel.queryInfo(peer).then((Blockchain) => {
-		req.channel.queryBlockByTxID(results[1].tx_id).then((Block) => {
 			res.status(200).json({ 'result1': results[0], 'result2': results[1], 'Block': Block });
-		})
+
 
 	}).catch((err) => {
 		console.error('Failed to invoke successfully :: ' + err);

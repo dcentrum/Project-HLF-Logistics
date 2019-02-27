@@ -139,7 +139,7 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 
 func (s *SmartContract) createPackage(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) <= 7 {
+	if len(args) < 7 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 7")
 	}
 
