@@ -10,17 +10,17 @@ module.exports = {
         return org
     },
     getManufacturers() {
-        return getOrgsByType('mfg')
+        return this.getOrgsByType('mfg')
     },
     getShippers() {
-        return getOrgsByType('shp')
+        return this.getOrgsByType('shp')
     },
     getRetailers() {
-        return getOrgsByType('rtl')
+        return this.getOrgsByType('rtl')
     },
     getOrgsByType(typ) {
         var orgs = [];
-        RefData.users.forEach(org => {
+        RefData.orgs.forEach(org => {
             if (org.orgType == typ) {
                 orgs.push(org);
             }

@@ -22,7 +22,90 @@ app.use((req, res, next) => {
 	next();
 });
 app.use(authUtils.userValidation);
-app.get('/api/manufacturers', async (req, res) => {	
+
+app.post('/api/initledger', async (req, res) => {
+	tx_id = req.fabricClient.newTransactionID();
+	var request = {
+		chaincodeId: 'blockcc',
+		fcn: 'initLedger',
+		args: [],
+		chainId: 'commonchannel',
+		txId: tx_id
+	};
+	req.channel.sendTransactionProposal(request).then((results) => {
+		var proposalResponses = results[0];
+		var proposal = results[1];
+		let isProposalGood = false;
+		if (proposalResponses && proposalResponses[0].response &&
+			proposalResponses[0].response.status === 200) {
+			isProposalGood = true;
+		} else {
+			console.error('Transaction proposal was bad');
+		}
+		if (isProposalGood) {
+			var request = {
+				proposalResponses: proposalResponses,
+				proposal: proposal
+			};
+
+			var transaction_id_string = tx_id.getTransactionID();
+			var promises = [];
+
+			var sendPromise = req.channel.sendTransaction(request);
+			promises.push(sendPromise);
+			let event_hub = req.channel.newChannelEventHub(req.peer);
+			let txPromise = new Promise((resolve, reject) => {
+				let handle = setTimeout(() => {
+					event_hub.unregisterTxEvent(transaction_id_string);
+					event_hub.disconnect();
+					resolve({ event_status: 'TIMEOUT' });
+				}, 30000);
+				event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
+					clearTimeout(handle);
+					var return_status = { event_status: code, tx_id: transaction_id_string };
+					if (code !== 'VALID') {
+						console.error('The transaction was invalid, code = ' + code);
+						resolve(return_status);
+					} else {
+						console.log('The transaction has been committed on peer ' + event_hub.getPeerAddr());
+						resolve(return_status);
+					}
+				}, (err) => {
+					reject(new Error('There was a problem with the eventhub ::' + err));
+				},
+					{ disconnect: true }
+				);
+				event_hub.connect();
+
+			});
+			promises.push(txPromise);
+
+			return Promise.all(promises);
+		} else {
+			console.error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
+			throw new Error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
+		}
+	}).then((results) => {
+		console.log('Send transaction promise and event listener promise have completed');
+		// check the results in the order the promises were added to the promise all list
+		if (results && results[0] && results[0].status === 'SUCCESS') {
+			console.log('Successfully sent transaction to the orderer.');
+		} else {
+			console.error('Failed to order the transaction. Error code: ' + results[0].status);
+		}
+
+		if (results && results[1] && results[1].event_status === 'VALID') {
+			console.log('Successfully committed the change to the ledger by the peer');
+		} else {
+			console.log('Transaction failed to be committed to the ledger due to ::' + results[1].event_status);
+		}
+		res.status(200).json(results);
+	}).catch((err) => {
+		console.error('Failed to invoke successfully :: ' + err);
+	});
+});
+
+app.get('/api/manufacturers',  async(req, res) => {	
 		res.status(200).json(refDataHelper.getManufacturers());	
 });
 app.get('/api/shippers', async (req, res) => {	
@@ -34,7 +117,7 @@ app.get('/api/retailers', async (req, res) => {
 app.get('/api/shipments', async (req, res) => {
 	const request = {
 		chaincodeId: 'blockcc',
-		fcn: 'getAllBookings',
+		fcn: 'getAllShipments',
 		args: [req.org]
 	};
 	req.channel.queryByChaincode(request).then((query_responses) => {
@@ -136,11 +219,11 @@ app.post('/api/shipment', async (req, res) => {
 		console.error('Failed to invoke successfully :: ' + err);
 	});
 });
-app.get('/api/shipment', async (req, res) => {
+app.get('/api/shipment/:key', async (req, res) => {
 	const request = {
 		chaincodeId: 'blockcc',
-		fcn: 'queryBooking',
-		args: [req.query.key]
+		fcn: 'queryShipment',
+		args: [req.params.key]
 	};
 	req.channel.queryByChaincode(request).then((query_responses) => {
 		if (query_responses && query_responses.length == 1) {
@@ -160,7 +243,7 @@ app.post('/api/shipment/:shipmentid/package', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'createPackage',
-		args: [req.query.shipmentid,req.body.rwbnumber, req.body.hsnnumber, req.body.productname, req.body.producttype, req.body.productqty,, req.body.productsize],
+		args: [req.params.shipmentid,req.body.rwbnumber, req.body.hsnnumber, req.body.productname, req.body.producttype, req.body.productqty,, req.body.productsize],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -245,7 +328,7 @@ app.post('/api/shipment/:shipmentid/acceptorreject', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'addShipmentDRS',
-		args: [req.query.shipmentid,req.body.acceptorreject,req.body.driverid,req.body.vehicletype,req.body.vehiclenum],
+		args: [req.params.shipmentid,req.body.acceptorreject,req.body.driverid,req.body.vehicletype,req.body.vehiclenum],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -330,7 +413,7 @@ app.post('/api/shipment/:shipmentid/package/:packageId/driveracceptorreject', as
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'driverAcceptOrReject',
-		args: [req.query.shipmentid,req.query.packageid,req.body.action],
+		args: [req.params.shipmentid,req.params.packageid,req.body.action],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -415,7 +498,7 @@ app.post('/api/shipment/:shipmentid/pickup', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'shipmentPickup',
-		args: [req.query.shipmentid,req.body.partySign,req.body.partySigDate,req.body.driverSign,req.body.driverSigDate,req.body.lat,req.body.lng,req.body.notes],
+		args: [req.params.shipmentid,req.body.partySign,req.body.partySigDate,req.body.driverSign,req.body.driverSigDate,req.body.lat,req.body.lng,req.body.notes],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -500,7 +583,7 @@ app.post('/api/shipment/:shipmentid/deliver', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'shipmentDeliver',
-		args: [req.query.shipmentid,req.body.partySign,req.body.partySigDate,req.body.driverSign,req.body.driverSigDate,req.body.lat,req.body.lng,req.body.notes],
+		args: [req.params.shipmentid,req.body.partySign,req.body.partySigDate,req.body.driverSign,req.body.driverSigDate,req.body.lat,req.body.lng,req.body.notes],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -585,7 +668,7 @@ app.post('/api/shipment/:shipmentid/package/:packageId/outbound', async (req, re
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'updatePackageOutbound',
-		args: [req.query.shipmentid,req.query.packageid,req.body.status],
+		args: [req.params.shipmentid,req.params.packageid,req.body.status],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -670,7 +753,7 @@ app.delete('/api/booking/:bookingid', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: ('deleteBooking'),
-		args: [req.query.bookingid],
+		args: [req.params.bookingid],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -745,13 +828,13 @@ app.delete('/api/booking/:bookingid', async (req, res) => {
 		console.error('Failed to invoke successfully :: ' + err);
 	});
 });
-app.get('/api/booking/:bookingid/history', async (req, res) => {
+app.get('/api/shipment/:shipmentid/history', async (req, res) => {
 
 	const request = {
 		//targets : --- letting this default to the peers assigned to the channel
 		chaincodeId: 'blockcc',
-		fcn: 'bookingHistory',
-		args: [req.query.bookingid]
+		fcn: 'shipmentHistory',
+		args: [req.params.shipmentid]
 	};
 	req.channel.queryByChaincode(request).then((query_responses) => {
 		console.log("Query has completed, checking results");
@@ -778,15 +861,15 @@ app.get('/api/blockchain', async (req, res) => {
 		res.status(500).json({ error: err.toString() })
 	})
 });
-app.get('/api/block', async (req, res) => {
-	req.channel.queryBlockByTxID(req.query.txid).then((block) => {
+app.get('/api/block:txid', async (req, res) => {
+	req.channel.queryBlockByTxID(req.params.txid).then((block) => {
 		res.status(200).json(block);
 	}).catch(function (err) {
 		res.status(500).json({ error: err.toString() })
 	})
 });
-app.get('/api/trans', async (req, res) => {
-	req.channel.queryTransaction(req.query.txid).then((trans) => {
+app.get('/api/trans/:txid', async (req, res) => {
+	req.channel.queryTransaction(req.params.txid).then((trans) => {
 		res.status(200).json(trans);
 	}).catch(function (err) {
 		res.status(500).json({ error: err.toString() })
