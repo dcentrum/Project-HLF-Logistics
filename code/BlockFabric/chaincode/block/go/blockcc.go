@@ -139,7 +139,7 @@ func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args
 
 func (s *SmartContract) createPackage(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) <= 7 {
+	if len(args) < 7 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 7")
 	}
 
@@ -577,6 +577,22 @@ func (s *SmartContract) shipmentHistory(APIstub shim.ChaincodeStubInterface, arg
 }
 
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
+	shps := []ShipmentOrder{
+		ShipmentOrder{BookingNumber: 1122, BookingDate: time.Now().Format("20060102150405"), Shipper: "shp1"},
+		ShipmentOrder{BookingNumber: 1113, BookingDate: time.Now().Format("20060102150405"), Shipper: "shp1"},
+	}
+
+	rec1, err := json.Marshal(shps[0])
+	if err != nil {
+		return shim.Error("error parsing record one")
+	}
+	APIstub.PutState("1122", rec1)
+	rec2, err1 := json.Marshal(shps[1])
+	if err1 != nil {
+		return shim.Error("error parsing record two")
+	}
+	APIstub.PutState("1123", rec2)
+
 	return shim.Success(nil)
 }
 

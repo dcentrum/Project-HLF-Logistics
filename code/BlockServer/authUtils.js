@@ -7,7 +7,6 @@ module.exports = {
             //next();
             FabricSdkService.setUser(req.fabricClient, req.headers.username).then(
                 (status) => {
-                    console.log(status);
                     if (status === true) {
                         next();
                     }
