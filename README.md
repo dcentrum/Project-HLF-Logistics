@@ -88,19 +88,19 @@ cd BlockFabric
 Phase 1 : [ Workflow Diagram](https://github.com/dcentrum/Project-HLF-Logistics/blob/master/docs/DCentrum_Blockchain_Block_Sequence.png)
 
 ## TEAM
-|    Roles                  |           Names                         |
-|---------------------------|-----------------------------------------|
-| Author , Product Owner    | Mohan Krishna G                         |
-| Product Manager           | Deepak B                                |
-| Requirement Analysis      | Mohan Krishna, Tameem A                 |
-| Solution Design           | Sreenivas C                             |
-| UI Development            | Sesha Rao N(web), Srikanth V (Mobile)   |
-| Hyperledger Orchestration | Tameem A,Sesha Rao N, Sreenivas C       |
-| Smart Contracts Dev       | Sreenivas C, Mohan Krishna G;Sesha Rao N|
-| Testing                   | Mohan Krishna G, Tameem A               |
-| UI Development            | Sesha Rao N(web), Srikanth V (Mobile)   |
-| Integration               | Sreenivas C                             |
-| Deployment                | Sreenivas C                             |
+| Roles                       | Names                                     |
+| --------------------------- | ----------------------------------------- |
+| Author , Product Owner      | Mohan Krishna G                           |
+| Product Manager             | Deepak B                                  |
+| Requirement Analysis        | Mohan Krishna, Tameem A                   |
+| Solution Design             | Sreenivas C                               |
+| UI Development              | Sesha Rao N(web), Srikanth V (Mobile)     |
+| Hyperledger Orchestration   | Tameem A,Sesha Rao N, Sreenivas C         |
+| Smart Contracts Dev         | Sreenivas C, Mohan Krishna G;Sesha Rao N  |
+| Testing                     | Mohan Krishna G, Tameem A                 |
+| UI Development              | Sesha Rao N(web), Srikanth V (Mobile)     |
+| Integration                 | Sreenivas C                               |
+| Deployment                  | Sreenivas C                               |
 
 
 

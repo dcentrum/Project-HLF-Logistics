@@ -6,8 +6,8 @@ import 'rxjs/add/operator/toPromise';
 
 @Component({
     selector: 'app-shipmentbooking',
-    templateUrl: './shipmentbooking.component.html',
-    styleUrls: ['./shipmentbooking.component.css']
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css']
   })
 export class PackageComponent implements OnInit {
 
@@ -22,6 +22,7 @@ export class PackageComponent implements OnInit {
   package: { 'RWBNumber': any; 'hsnNumber': any; 'productQty': any; 'productName': any; 'productType': any; 'size': any; };
   allPackages: any[];
   errorMessage: any;
+  packageId: FormControl;
 
   constructor(private BlockService: BlockService, fb: FormBuilder) {
     this.myForm = fb.group({
@@ -134,7 +135,7 @@ export class PackageComponent implements OnInit {
         'size': this.size.value,
         'productName': this.productName.value,
         'productType': this.productType.value,
-        'productQty': this.productQty.
+        'productQty': this.productQty
     };
 
     return this.BlockService.updatePackage(this.package)
@@ -156,7 +157,7 @@ export class PackageComponent implements OnInit {
 
   deletePackage(): Promise<any> {
 
-    return this.BlockService.deletePackage(this.RWBNumber)
+    return this.BlockService.deletePackage("RWBNumber")
     .toPromise()
     .then(() => {
       this.errorMessage = null;
@@ -172,13 +173,13 @@ export class PackageComponent implements OnInit {
     });
   }
 
-  setId(id: any): void {
-    this.package = this.RWBNumber;
+  setId(packageId: any): void {
+    this.packageId = this.RWBNumber;
   }
 
-  getForm(id: any): Promise<any> {
+  getForm(packageId: any): Promise<any> {
 
-    return this.BlockService.getPackage(RWBNumber)
+    return this.BlockService.getPackage("RWBNumber")
     .toPromise()
     .then((result) => {
       this.errorMessage = null;

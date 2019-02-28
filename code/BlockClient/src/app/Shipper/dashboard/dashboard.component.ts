@@ -5,8 +5,8 @@ import { BlockService } from '../../block.service'
 
 @Component({
   selector: 'app-retailerdashboard',
-  templateUrl: './retailerdashboard.component.html',
-  styleUrls: ['./retailerdashboard.component.css']
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;

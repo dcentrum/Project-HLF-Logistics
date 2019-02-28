@@ -8,7 +8,7 @@ import { BlockService } from '../../block.service'
   templateUrl: './retailerdashboard.component.html',
   styleUrls: ['./retailerdashboard.component.css']
 })
-export class RetailDashboardComponent implements OnInit {
+export class RetailerdashboardComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: ShipmentlistDataSource;
