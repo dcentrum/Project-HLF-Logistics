@@ -139,7 +139,7 @@ app.post('/api/shipment', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'createShipment',
-		args: [req.body.bookingnumber, req.body.createdate,req.body.shipper, req.body.retailer,req.body.manufacturer, req.body.pickupdate,req.body.pickuplocation,req.body.deliverdate,req.body.deliverlocation, req.body.notes],
+		args: [req.body.BookingNumber.toString(), req.body.BookingDate,req.body.Shipper, req.body.Retailer,req.body.Manufacturer, req.body.PickupDate,req.body.PickupLocation,req.body.DeliveryDate,req.body.DeliveryLocation, req.body.Notes],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};
@@ -156,6 +156,7 @@ app.post('/api/shipment', async (req, res) => {
 	// 	'deliverlocation':"delhi",
 	// 	"notes":"some notes"
 	// 	}
+
 	req.channel.sendTransactionProposal(request).then((results) => {
 		var proposalResponses = results[0];
 		var proposal = results[1];
