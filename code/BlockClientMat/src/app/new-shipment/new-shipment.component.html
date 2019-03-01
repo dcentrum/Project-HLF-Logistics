@@ -1,0 +1,138 @@
+<form [formGroup]="shipmentForm" novalidate (ngSubmit)="onSubmit($event)">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="5px">
+  <mat-card fxFlex="50%" fxFlex.lt-md="100%">
+      
+    <mat-card-content>
+      <div class="row" *ngIf="!IsNew">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput readonly placeholder="Booking Number" formControlName="bookingNumber"
+              [(ngModel)]="shipment.BookingNumber">
+            <mat-error *ngIf="shipmentForm.controls['bookingNumber'].hasError('required')">
+              Booking Number is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input type="date" matInput placeholder="Create Date" [(ngModel)]="shipment.BookingDate"
+              formControlName="createDate">
+            <mat-error *ngIf="shipmentForm.controls['createDate'].hasError('required')">
+              Create Date is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Retailer" [(ngModel)]="shipment.Retailer" formControlName="retailer">
+            <mat-error *ngIf="shipmentForm.controls['retailer'].hasError('required')">
+              Retailer is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Manufacturer" [(ngModel)]="shipment.Manufacturer"
+              formControlName="manufacturer">
+            <mat-error *ngIf="shipmentForm.controls['manufacturer'].hasError('required')">
+              Manufacturer is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input type="date" matInput placeholder="Delivery Date" [(ngModel)]="shipment.DeliveryDate"
+              formControlName="deliveryDate" />
+            <mat-error *ngIf="shipmentForm.controls['deliveryDate'].hasError('required')">
+              Delivery Date is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Delivery Location" [(ngModel)]="shipment.DeliveryLocation"
+              formControlName="deliveryLocation" />
+            <mat-error *ngIf="shipmentForm.controls['deliveryLocation'].hasError('required')">
+              Delivery Location is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card fxFlex="50%" fxFlex.lt-md="100%">
+      
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input type="date" matInput placeholder="Pickup Date" [(ngModel)]="shipment.PickupDate"
+              formControlName="pickupDate" />
+            <mat-error *ngIf="shipmentForm.controls['pickupDate'].hasError('pickupDate')">
+              Pickup Date is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Pickup Location" [(ngModel)]="shipment.PickupLocation"
+              formControlName="pickupLocation" />
+            <mat-error *ngIf="shipmentForm.controls['pickupLocation'].hasError('required')">
+              Pickup Location is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Shipper" [(ngModel)]="shipment.Shipper"
+              formControlName="shipper" />
+            <mat-error *ngIf="shipmentForm.controls['shipper'].hasError('required')">
+              Shipper is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Notes" [(ngModel)]="shipment.Notes" formControlName="notes"></textarea>
+            <!-- <mat-error *ngIf="shipmentForm.controls['shipper'].hasError('required')">
+              Notes is <strong>required</strong>
+            </mat-error> -->
+          </mat-form-field>
+        </div>
+      </div>
+
+    </mat-card-content>
+    <mat-card-actions>
+        <div>
+          <button color="primary" type="submit" mat-icon-button>
+            <mat-icon>done</mat-icon>
+          </button>
+          <!-- <button fxFlex color="primary" (click)="deleteShipment()" type="button" mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button fxFlex color="primary" (click)="clear()" type="button" mat-icon-button>
+            <mat-icon>add</mat-icon>
+          </button>
+          <button fxFlex color="primary" (click)="info()" type="button" mat-icon-button>
+            <mat-icon>info</mat-icon>
+          </button> -->
+        </div>
+      </mat-card-actions>
+  </mat-card>
+</div>
+</form>

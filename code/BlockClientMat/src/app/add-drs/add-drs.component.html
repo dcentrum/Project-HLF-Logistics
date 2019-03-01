@@ -1,0 +1,29 @@
+<form [formGroup]="drsForm" novalidate (ngSubmit)="AddDRS($event)">
+    <table>   
+      <tr>
+        <td style="width:100px">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="Vehicle" formControlName="VehicleNumber"
+              [(ngModel)]="shipment.VehicleNumber" />
+          </mat-form-field>
+        </td>
+        <td style="width:100px">
+          <mat-form-field class="full-width">
+            <input type="text" matInput placeholder="VehicleType" formControlName="VehicleType"
+              [(ngModel)]="shipment.VehicleType" />
+          </mat-form-field>
+        </td>     
+        <td style="width:100px">
+            <mat-form-field class="full-width">
+              <input type="text" matInput placeholder="Driver" formControlName="Driver"
+                [(ngModel)]="shipment.Driver" />
+            </mat-form-field>
+          </td>        
+        <td style="width:100px">
+          <button color="primary" mat-icon-button>
+            <mat-icon>done</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </form>

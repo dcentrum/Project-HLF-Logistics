@@ -1,0 +1,39 @@
+<table>
+  <tr>
+    <th style="width: 100px">Bookingnumber</th>
+    <th style="width: 100px">Date</th>
+    <th style="width: 100px">Manuf</th>
+    <th style="width: 100px">Ratiler</th>
+    <th style="width: 100px">Shipper</th>
+    <th style="width: 100px">Packages</th>
+    <th style="width: 100px">Status</th>
+
+    <th style="width: 100px">Action</th>
+  </tr>
+  <tr *ngFor="let item of list">
+    <td style="width: 100px">{{item.BookingNumber}}</td>
+    <td style="width: 100px">{{item.BookingDate}}</td>
+    <td style="width: 100px">{{item.Manufacturer}}</td>
+    <td style="width: 100px">{{item.Retailer}}</td>
+    <td style="width: 100px">{{item.Shipper}}</td>
+    <td style="width: 100px">{{item.Packages?item.Packages.length:0}}</td>
+    <td style="width: 100px">{{numToShippingStatus(item.Status)}}</td>
+    <td style="width: 100px">
+      <button color="primary" (click)="editShipment(item)" mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button color="primary" (click)="shipmentInfo(item)" mat-icon-button>
+        <mat-icon>info</mat-icon>
+      </button>
+    </td>
+  </tr>
+</table>
+<button *ngIf="this.party=='manuf'" color="primary" (click)="addShipment()" mat-icon-button>
+  <mat-icon>add</mat-icon>
+</button>
+<div *ngIf="shipmentLoaded">
+<app-package-list *ngIf="this.party=='manuf' || this.party=='driver' || this.party=='retailer'" [packages]="shipment.Packages"></app-package-list>
+<app-new-package *ngIf="this.party=='manuf'" (onAddPackage)="packageAdded($event)"></app-new-package>
+<app-add-drs *ngIf="this.party=='shipper'" (onDrdAdd)="onDrdAdd($event)" [shipment]="shipment">
+</app-add-drs>
+</div>

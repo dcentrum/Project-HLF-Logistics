@@ -1,0 +1,50 @@
+<h3>Packages</h3>
+<table>
+  <tr>
+    <th style="width:100px">
+      RWB
+    </th>
+    <th style="width:100px">
+      HsnNumber
+    </th>
+    <th>
+      ProductName
+    </th>
+    <th style="width:100px">
+      ProductQty
+    </th>
+    <!-- <th style="width:100px">
+      ProductSize
+    </th> -->
+    <th style="width:100px">
+      Status
+    </th>
+  </tr>
+  <tr *ngFor="let item of packages">
+    <td>
+      {{item.RWBNumber}}
+    </td>
+    <td>
+      {{item.HsnNumber}}
+    </td>
+    <td>
+      {{item.ProductName}}
+    </td>
+    <td>
+      {{item.ProductQty}}
+    </td>
+    <!-- <td>
+      {{item.ProductSize}}
+    </td> -->
+    <td>
+      <button color="primary" mat-icon-button >
+        <mat-icon>done</mat-icon>
+      </button>
+      <button color="primary" mat-icon-button>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </td>
+
+  </tr>
+
+</table>

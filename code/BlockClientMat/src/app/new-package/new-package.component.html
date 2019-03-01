@@ -1,0 +1,36 @@
+<form [formGroup]="packageForm" novalidate (ngSubmit)="AddPackage($event)">
+  <table>   
+    <tr>
+      <td style="width:100px">
+        <mat-form-field class="full-width">
+          <input type="text" matInput placeholder="RWBNumber" formControlName="RWBNumber"
+            [(ngModel)]="newpackage.RWBNumber" />
+        </mat-form-field>
+      </td>
+      <td style="width:100px">
+        <mat-form-field class="full-width">
+          <input type="text" matInput placeholder="Hsn" formControlName="HsnNumber"
+            [(ngModel)]="newpackage.HsnNumber" />
+        </mat-form-field>
+      </td>
+      <td style="width:100px">
+        <mat-form-field class="full-width">
+          <input type="text" matInput placeholder="Product Name" formControlName="ProductName"
+            [(ngModel)]="newpackage.ProductName" />
+        </mat-form-field>
+      </td>
+      <td style="width:100px">
+        <mat-form-field class="full-width">
+          <input type="text" matInput placeholder="Qty" formControlName="ProductQty"
+            [(ngModel)]="newpackage.ProductQty" />
+        </mat-form-field>
+      </td>
+
+      <td style="width:100px">
+        <button color="primary" mat-icon-button>
+          <mat-icon>done</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </table>
+</form>

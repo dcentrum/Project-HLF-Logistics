@@ -1,0 +1,49 @@
+{
+    "_id": "745",
+    "_rev": "1-e0d323c0946fc3fc2ac06c24e9ac8740",
+    "BookingDate": "2019-03-01",
+    "BookingNumber": 1000109,
+    "DeliveryDate": "2019-03-04",
+    "DeliveryLocation": "Future Group Seethamma Dhara, Visakhapatnam, AP - 530002",
+    "Driver": "Rajesh",
+    "DriverManfSign": {
+      "Lang": 0,
+      "Lat": 0,
+      "Notes": "Carton is not properly packaged so rejecting it.",
+      "Sig": "",
+      "SigDate": "2019-03-02T10:45:00Z"
+    },
+    "DriverRetailerSign": {
+      "Lang": 0,
+      "Lat": 0,
+      "Notes": "",
+      "Sig": "",
+      "SigDate": "0001-01-01T00:00:00Z"
+    },
+    "ManfSign": {
+      "Lang": 0,
+      "Lat": 0,
+      "Notes": "",
+      "Sig": "",
+      "SigDate": "2019-03-02T10:46:00Z"
+    },
+    "Manufacturer": "Ecobliss",
+    "Notes": "Urgent Basis",
+    "Packages": null,
+    "PickupDate": "2019-03-02",
+    "PickupLocation": "Ecobliss, Patancheru, Medak, Telangana - 502319",
+    "Retailer": "Future Group",
+    "RetailerSign": {
+      "Lang": 0,
+      "Lat": 0,
+      "Notes": "",
+      "Sig": "",
+      "SigDate": "0001-01-01T00:00:00Z"
+    },
+    "Shipper": "Ecom",
+    "Status": 1,
+    "StatusDate": "2019-02-28T16:15:35.389035502Z",
+    "VehicleNumber": "TS06EB7586",
+    "VehicleType": "MGV",
+    "~version": "\u0000CgMBBQA="
+  }
