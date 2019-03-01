@@ -26,6 +26,16 @@
         <mat-icon>info</mat-icon>
       </button>
     </td>
+
+    <td style="width: 100px">
+      <button color="primary" *ngIf="this.party=='manuf'" (click)="ConfirmPickup(item)" >
+        <!-- <mat-icon>edit</mat-icon> -->
+        Confirm Pickup   
+      </button>
+      <button color="primary" *ngIf="this.party=='retailer'" (click)="ConfirmDeliver(item)">
+        Confirm Delivery        
+      </button>
+    </td>
   </tr>
 </table>
 <button *ngIf="this.party=='manuf'" color="primary" (click)="addShipment()" mat-icon-button>
