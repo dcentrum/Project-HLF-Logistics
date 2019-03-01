@@ -5,7 +5,8 @@ module.exports = {
             let usefabric = false;
             //if(!usefabric)
             //next();
-            FabricSdkService.setUser(req.fabricClient, req.headers.username).then(
+            //req.headers.username
+            FabricSdkService.setUser(req.fabricClient, "mfg1user").then(
                 (status) => {
                     if (status === true) {
                         next();

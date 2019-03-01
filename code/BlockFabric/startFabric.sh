@@ -93,3 +93,16 @@ printf "\n User registrations end \n"
 
 printf 'Block Fabric network ready to connect'
 printf 'One admin and one user created for each org. one driver user created for each shipper company'
+
+
+
+#peer chaincode invoke -o orderer.block.com:7050 -C commonchannel -n blockcc -c '{"function":"addShipmentDRS","Args":["97","aaa","vvv","aaa","1","1"]}'
+
+#peer chaincode invoke -o orderer.block.com:7050 -C commonchannel -n blockcc -c '{"function":"shipmentPickup","Args":["1122","SreeSign","2019-01-02","DeeSign","2019-02-02","17.0000","58.0000","pickedup","1"]}'
+
+
+#peer chaincode invoke -o orderer.block.com:7050 -C commonchannel -n blockcc -c '{"function":"shipmentPickup","Args":["857","SreeSign","2019-01-02","DeeSign","2019-02-02","17.0000","58.0000","Delivered","1"]}'
+
+
+
+

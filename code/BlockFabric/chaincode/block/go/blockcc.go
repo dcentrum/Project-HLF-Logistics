@@ -122,7 +122,7 @@ func (s *SmartContract) Init(APIstub shim.ChaincodeStubInterface) sc.Response {
 
 func (s *SmartContract) createShipment(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) <= 5 {
+	if len(args) < 5 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 5")
 	}
 	BookingNo, err := strconv.Atoi(args[0])
@@ -159,7 +159,7 @@ func (s *SmartContract) createPackage(APIstub shim.ChaincodeStubInterface, args 
 
 func (s *SmartContract) addShipmentDRS(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) <= 4 {
+	if len(args) < 4 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 4")
 	}
 	Stat, err := strconv.Atoi(args[1])
@@ -172,17 +172,11 @@ func (s *SmartContract) addShipmentDRS(APIstub shim.ChaincodeStubInterface, args
 
 	json.Unmarshal(ShipmentOrderAsBytes, &ShipmentOrder)
 	if Stat == 1 {
-		ShipmentOrder.Status = ShipmentAccepted
+		ShipmentOrder.Status = DriverAssigned
 	} else if Stat == 2 {
 		//shipment rejected
 		ShipmentOrder.Status = ShipmentRejected
 	}
-	ShipmentOrderAsBytes, _ = json.Marshal(ShipmentOrder)
-	APIstub.PutState(args[0], ShipmentOrderAsBytes)
-
-	ShipmentOrderAsBytes2, _ := APIstub.GetState(args[0])
-	// Assigning driver
-	json.Unmarshal(ShipmentOrderAsBytes2, &ShipmentOrder)
 	ShipmentOrder.Driver = args[2]
 	ShipmentOrder.VehicleType = args[3]
 	ShipmentOrder.VehicleNumber = args[4]
@@ -196,7 +190,7 @@ func (s *SmartContract) addShipmentDRS(APIstub shim.ChaincodeStubInterface, args
 
 func (s *SmartContract) driverAcceptOrReject(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) <= 3 {
+	if len(args) < 3 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 3")
 	}
 	RWB, err := strconv.Atoi(args[1])
@@ -219,7 +213,11 @@ func (s *SmartContract) driverAcceptOrReject(APIstub shim.ChaincodeStubInterface
 	ShipmentOrder := ShipmentOrder{}
 
 	json.Unmarshal(ShipmentOrderAsBytes, &ShipmentOrder)
-	ShipmentOrder.Packages[RWB].Status = status
+	for i := 1; i < len(ShipmentOrder.Packages); i++ {
+		if ShipmentOrder.Packages[i].RWBNumber == RWB {
+			ShipmentOrder.Packages[i].Status = status
+		}
+	}
 
 	ShipmentOrderAsBytes, _ = json.Marshal(ShipmentOrder)
 	APIstub.PutState(args[0], ShipmentOrderAsBytes)
@@ -229,7 +227,7 @@ func (s *SmartContract) driverAcceptOrReject(APIstub shim.ChaincodeStubInterface
 
 func (s *SmartContract) shipmentPickup(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) <= 7 {
+	if len(args) < 7 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 7")
 	}
 
@@ -259,7 +257,7 @@ func (s *SmartContract) shipmentPickup(APIstub shim.ChaincodeStubInterface, args
 	ShipmentOrder := ShipmentOrder{}
 
 	json.Unmarshal(ShipmentOrderAsBytes, &ShipmentOrder)
-	ShipmentOrder.Status = 6
+	ShipmentOrder.Status = ShipmentPicked
 	ShipmentOrder.ManfSign = ManfSig
 	ShipmentOrder.DriverManfSign = DriverSig
 	ShipmentOrder.Notes = args[7]
@@ -272,7 +270,7 @@ func (s *SmartContract) shipmentPickup(APIstub shim.ChaincodeStubInterface, args
 
 func (s *SmartContract) shipmentDeliver(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) <= 7 {
+	if len(args) < 7 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 7")
 	}
 	retrSigt, errt := time.Parse("2006-01-02", args[2])
@@ -300,7 +298,7 @@ func (s *SmartContract) shipmentDeliver(APIstub shim.ChaincodeStubInterface, arg
 	ShipmentOrder := ShipmentOrder{}
 
 	json.Unmarshal(ShipmentOrderAsBytes, &ShipmentOrder)
-	ShipmentOrder.Status = 8
+	ShipmentOrder.Status = ShipmentDeleted
 	ShipmentOrder.RetailerSign = RetailerSig
 	ShipmentOrder.DriverRetailerSign = DriverSig
 	ShipmentOrder.Notes = args[7]
@@ -313,7 +311,7 @@ func (s *SmartContract) shipmentDeliver(APIstub shim.ChaincodeStubInterface, arg
 
 func (s *SmartContract) updatePackageOutbound(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) <= 3 {
+	if len(args) < 3 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 3")
 	}
 	RWB, err := strconv.Atoi(args[1])
