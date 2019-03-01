@@ -193,10 +193,8 @@ func (s *SmartContract) driverAcceptOrReject(APIstub shim.ChaincodeStubInterface
 	if len(args) < 3 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 3")
 	}
-	RWB, err := strconv.Atoi(args[1])
-	if err != nil {
-		return shim.Error("Invalid RWBNumber")
-	}
+	RWB := args[1]
+
 	Stat, err := strconv.Atoi(args[2])
 	if err != nil {
 		return shim.Error("Invalid Status")
@@ -314,28 +312,25 @@ func (s *SmartContract) updatePackageOutbound(APIstub shim.ChaincodeStubInterfac
 	if len(args) < 3 {
 		return shim.Error("Incorrect number of arguments. Expecting Minimum 3")
 	}
-	RWB, err := strconv.Atoi(args[1])
-	if err != nil {
-		return shim.Error("Invalid RWB")
-	}
-	Stat, err := strconv.Atoi(args[2])
-	if err != nil {
-		return shim.Error("Invalid Status")
-	}
-	status := RetailerAccepted
-	if Stat == 1 {
-		//driver accepted
-		status = RetailerAccepted
-	} else if Stat == 2 {
-		//driver rejected
-		status = RetailerRejected
-	}
+
+	// Stat, err := strconv.Atoi(args[2])
+	// if err != nil {
+	// 	return shim.Error("Invalid Status")
+	// }
+	// status := RetailerAccepted
+	// if Stat == 1 {
+	// 	//driver accepted
+	// 	status = RetailerAccepted
+	// } else if Stat == 2 {
+	// 	//driver rejected
+	// 	status = RetailerRejected
+	// }
 
 	ShipmentOrderAsBytes, _ := APIstub.GetState(args[0])
 	ShipmentOrder := ShipmentOrder{}
 
 	json.Unmarshal(ShipmentOrderAsBytes, &ShipmentOrder)
-	ShipmentOrder.Packages[RWB].Status = status
+	//ShipmentOrder.Packages[0].Status = status
 	ShipmentOrder.Status = Delivered
 
 	ShipmentOrderAsBytes, _ = json.Marshal(ShipmentOrder)
