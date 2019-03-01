@@ -718,7 +718,7 @@ app.post('/api/shipment/:shipmentid/deliver', async (req, res) => {
 	var request = {
 		chaincodeId: 'blockcc',
 		fcn: 'shipmentDeliver',
-		args: [req.params.shipmentid, req.body.partySign, req.body.partySigDate, req.body.driverSign, req.body.driverSigDate, req.body.lat, req.body.lng, req.body.notes],
+		args: [req.params.shipmentid, req.body.partySign, req.body.partySigDate, req.body.DriverSig, req.body.driverSigDate, req.body.lat, req.body.lng, req.body.notes],
 		chainId: 'commonchannel',
 		txId: tx_id
 	};

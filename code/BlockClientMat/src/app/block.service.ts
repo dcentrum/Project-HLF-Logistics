@@ -19,8 +19,8 @@ export class BlockService {
   private dsTitle = new BehaviorSubject<string>("Block Client");
   Title = this.dsTitle.asObservable();
 
- private dsParty = new BehaviorSubject<string>("manuf");
- Party = this.dsParty.asObservable();
+  private dsParty = new BehaviorSubject<string>("manuf");
+  Party = this.dsParty.asObservable();
   appUrl: string = " http://localhost:8080/api/";
   Payload: any;
   constructor(private http: HttpClient) {
@@ -60,7 +60,30 @@ export class BlockService {
     return this.http.get<any>(this.appUrl + 'drivers')
       .pipe();
   }
-
+  ConfirmPickup(item: ShipmentOrder) {
+    return this.http.post<any>(this.appUrl + 'shipment/' + item.BookingNumber + "/pickup",
+      {
+        partySign: "Manuf Sign",
+        partySigDate: "2019-02-03",
+        DriverSig: "driver Sign",
+        driverSigDate: "2019-02-03",
+        lat: "28.7041",
+        lng: "77.1025",
+        notes: "Pickup"
+      }).pipe();
+  }
+  ConfirmDeliver(item: ShipmentOrder) {
+    return this.http.post<any>(this.appUrl + 'shipment/' + item.BookingNumber + "/deliver",
+      {
+        partySign: "Retailer Sign",
+        partySigDate: "2019-02-03",
+        DriverSig: "driver Sign",
+        driverSigDate: "2019-02-03",
+        lat: "28.7041",
+        lng: "77.1025",
+        notes: "Delivered"
+      }).pipe();
+  }
   addShipment(shipmentorder: ShipmentOrder) {
     return this.http.post<any>(this.appUrl + 'shipment', shipmentorder)//,{headers:this.createuserheaders()}
       .pipe();
@@ -126,7 +149,7 @@ export class BlockService {
       .pipe();
   }
   addDriver(shipment: any) {
-    return this.http.post<any>(this.appUrl + 'shipment/'+shipment.BookingNumber+"/drs", {VehicleNumber:shipment.VehicleNumber,VehicleType:shipment.VehicleType,Driver:shipment.Driver,Status:"1"})
+    return this.http.post<any>(this.appUrl + 'shipment/' + shipment.BookingNumber + "/drs", { VehicleNumber: shipment.VehicleNumber, VehicleType: shipment.VehicleType, Driver: shipment.Driver, Status: "1" })
       .pipe();
   }
   updateDriver(driver: any) {
@@ -167,8 +190,8 @@ export class BlockService {
     return this.http.get<any>(this.appUrl + 'RWBNumber?RWBNumber=' + RWBNumber)
       .pipe();
   }
-  addPackage(bookingNumber: number,package1:ShipmentPackage) {
-    return this.http.post<any>(this.appUrl + 'shipment/'+bookingNumber+'/package', package1)
+  addPackage(bookingNumber: number, package1: ShipmentPackage) {
+    return this.http.post<any>(this.appUrl + 'shipment/' + bookingNumber + '/package', package1)
       .pipe();
   }
   updatePackage(RWBNumber: any) {

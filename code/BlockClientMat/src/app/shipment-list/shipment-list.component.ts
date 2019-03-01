@@ -33,6 +33,18 @@ numToShippingStatus(num)
 
     this.shipment=item;
   }
+  ConfirmPickup(item)
+  {
+    this.blockService.ConfirmPickup(item).subscribe(res=>{
+
+    });
+  }
+  ConfirmDeliver(item)
+  {
+    this.blockService.ConfirmDeliver(item).subscribe(res=>{
+
+    });
+  }
   packageAdded(e)
   {
     if(this.shipment.Packages==null)
